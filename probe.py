@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
@@ -33,3 +34,5 @@ async def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
+=======
+>>>>>>> c546355c978e4e7fd3895c999d818d5d75d2591f
