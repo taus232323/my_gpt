@@ -1,6 +1,5 @@
 import logging
 from settings import TOKEN
-from response import get_gpt4_response
 from telegram import Update
 import asyncio
 import os
@@ -24,7 +23,7 @@ class Bot:
         await update.message.reply_text(text)
         self.history[user.id] = []
 
-    async def help(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def help(self, update: Update) -> None:
         await update.message.reply_text("Бот только развивается и сейчас он может только отвечать на текстовые сообщения")
 
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -46,9 +45,9 @@ class Bot:
             message = {"role": "assistant", "content": text}
         self.history[user_id].append(message)
         
-    def get_gpt4_response(self, user_id):
+    def get_gpt4_response(self, user_id) -> str:
         response = g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4,
+        model=g4f.models.gpt_4_32k,
         messages=self.history[user_id],
     )
         return response

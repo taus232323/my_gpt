@@ -1,10 +1,15 @@
 import g4f
 
-def get_gpt4_response(question):
+def get_gpt4_response(messages: list) -> str:
     response = g4f.ChatCompletion.create(
-    model=g4f.models.gpt_4,
-    messages=[{"role": "user", "content": question}],
+        model=g4f.models.gpt_4_32k,
+        messages=messages,
 )
+    print(response)
     return response
 
-# print(get_response("Можно ли вызывать синхронную фунцию в асихронном коде python?"))
+# print(get_gpt4_response("Напиши лишнее слово из предложенных: стол, стул, собака, шкаф"))
+messages = []
+while True:
+    messages.append({"role": "user", "content": input()})
+    messages.append({"role": "assistant", "content": get_gpt4_response(messages=messages)})
