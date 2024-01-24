@@ -38,7 +38,7 @@ class Bot:
         result = await loop.run_in_executor(None, self.get_gpt4_response, user.id)
         await update.message.reply_text(result)
         self.update_history(user.id, "assistant", result)
-        print(self.history[user.id])
+        self.autoclear_hystory(user.id)
     
     def update_history(self, user_id, role, text) -> None:
         if role == "user":
@@ -47,6 +47,10 @@ class Bot:
             message = {"role": "assistant", "content": text}
         self.history[user_id].append(message)
         
+    def autoclear_hystory(self, user_id) -> None:
+        if len(self.history[user_id]) > 32000:
+            self.history[user_id] = self.history[user_id][-10000:]
+    
     def clear_history(self, user_id) -> None:
         self.history[user_id] = []
         

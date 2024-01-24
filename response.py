@@ -6,6 +6,7 @@ def get_gpt4_response(messages: list) -> str:
         messages=messages,
 )
     print(response)
+    print(len(response))
     return response
 
 messages = []
