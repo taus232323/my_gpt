@@ -8,7 +8,6 @@ def get_gpt4_response(messages: list) -> str:
     print(response)
     return response
 
-# print(get_gpt4_response("Напиши лишнее слово из предложенных: стол, стул, собака, шкаф"))
 messages = []
 while True:
     messages.append({"role": "user", "content": input()})

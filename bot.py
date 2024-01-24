@@ -29,13 +29,15 @@ class Bot:
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         user = update.effective_user
         loop = asyncio.get_running_loop()
-        self.update_history(user_id=user.id, role='user', text=update.message.text)
+        if user.id not in self.history:
+            self.history[user.id] = []
+        self.update_history(user_id=user.id, role="user", text=update.message.text)
         
         await context.bot.send_chat_action(chat_id=update.message.chat_id, action='typing')
         
         result = await loop.run_in_executor(None, self.get_gpt4_response, user.id)
         await update.message.reply_text(result)
-        self.update_history(user.id, 'assistant', result)
+        self.update_history(user.id, "assistant", result)
         print(self.history[user.id])
     
     def update_history(self, user_id, role, text) -> None:
@@ -45,10 +47,13 @@ class Bot:
             message = {"role": "assistant", "content": text}
         self.history[user_id].append(message)
         
+    def clear_history(self, user_id) -> None:
+        self.history[user_id] = []
+        
     def get_gpt4_response(self, user_id) -> str:
         response = g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4_32k,
-        messages=self.history[user_id],
+            model=g4f.models.gpt_4_32k,
+            messages=self.history[user_id],
     )
         return response
         
@@ -57,7 +62,9 @@ class Bot:
 
         app.add_handler(CommandHandler("start", self.start))
         app.add_handler(CommandHandler("help", self.help))
+        app.add_handler(CommandHandler("clear", self.clear_history))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
+        
         
         app.run_polling(allowed_updates=Update.ALL_TYPES)
 
