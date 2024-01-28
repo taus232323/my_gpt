@@ -2,7 +2,7 @@ import g4f
 
 def get_gpt4_response(messages: list) -> str:
     response = g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4_32k,
+        model=g4f.models.gpt_4,
         messages=messages,
 )
     print(response)
