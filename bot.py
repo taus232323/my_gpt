@@ -115,5 +115,5 @@ class ChatBot:
 
 
 if __name__ == '__main__':
-    chat_bot = ChatBot()
-    chat_bot.run()
+    bot = Bot()
+    bot.run()
